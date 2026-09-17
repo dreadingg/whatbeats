@@ -3,41 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What Beats Calculator</title>
+    <title>whatbeatsrock - calc edition</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
-        body { background: #0d1117; color: #c9d1d9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 400px; }
-        .title { font-size: 1.4rem; color: #36bcf7; text-shadow: 0 0 10px #36bcf7; text-align: center; }
-        .top-bar { display: flex; justify-content: space-between; width: 100%; font-size: 0.9rem; color: #8b949e; }
-        .top-bar span { color: #3fb950; font-weight: bold; }
-        .mode-buttons { display: flex; gap: 10px; width: 100%; }
-        .mode-buttons button { flex: 1; padding: 10px; font-size: 0.8rem; background: #21262d; color: #c9d1d9; border: 1px solid #30363d; border-radius: 8px; cursor: pointer; transition: 0.15s; }
-        .mode-buttons button.active { background: #36bcf7; color: #0d1117; border-color: #36bcf7; }
-        .mode-buttons button:hover { border-color: #36bcf7; }
-        .calculator { background: #161b22; border: 2px solid #30363d; border-radius: 20px; padding: 20px; width: 100%; box-shadow: 0 0 30px rgba(54, 188, 247, 0.2); }
-        .screen { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: right; min-height: 110px; display: flex; flex-direction: column; justify-content: space-between; }
-        .input-display { font-size: 2rem; color: #36bcf7; word-wrap: break-word; word-break: break-all; }
-        .message-display { font-size: 0.85rem; color: #8b949e; margin-top: 5px; min-height: 2.4em; }
-        .message-display.win { color: #3fb950; }
-        .message-display.lose { color: #f85149; }
-        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        button { background: #21262d; color: #c9d1d9; border: 1px solid #30363d; border-radius: 10px; padding: 18px 0; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.15s ease; }
-        button:hover { background: #30363d; border-color: #36bcf7; }
-        button:active { transform: scale(0.95); }
-        button.operator { color: #36bcf7; }
-        button.equals { background: #36bcf7; color: #0d1117; }
-        button.equals:hover { background: #58c7f9; }
-        button.clear { color: #f85149; }
-        .hidden { display: none !important; }
-        .turn-indicator { font-size: 1rem; color: #8b949e; }
-        .turn-indicator span { color: #36bcf7; font-weight: bold; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f7f5f0; /* Creamy white */
+            color: #4a4a4a; /* Soft dark gray */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333333;
+            letter-spacing: 0.5px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.85rem;
+            color: #888888;
+            padding: 0 5px;
+        }
+
+        .top-bar span {
+            color: #333333;
+            font-weight: 600;
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .mode-buttons button {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.8rem;
+            background-color: #ffffff;
+            color: #666666;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .mode-buttons button.active {
+            background-color: #333333;
+            color: #ffffff;
+            border-color: #333333;
+        }
+
+        .mode-buttons button:hover {
+            border-color: #999999;
+        }
+
+        .turn-indicator {
+            font-size: 0.85rem;
+            color: #888888;
+            text-align: center;
+            width: 100%;
+        }
+
+        .turn-indicator span {
+            color: #333333;
+            font-weight: 600;
+        }
+
+        .calculator {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .screen {
+            background-color: #fafafa;
+            border: 1px solid #eeeeee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 18px;
+            text-align: right;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .input-display {
+            font-size: 1.8rem;
+            color: #333333;
+            word-wrap: break-word;
+            word-break: break-all;
+            font-weight: 400;
+        }
+
+        .message-display {
+            font-size: 0.8rem;
+            color: #999999;
+            margin-top: 5px;
+            min-height: 2.4em;
+            line-height: 1.4;
+        }
+
+        .message-display.win {
+            color: #4a7c59; /* Soft green */
+        }
+
+        .message-display.lose {
+            color: #a35c5c; /* Soft red */
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        button {
+            background-color: #fcfcfc;
+            color: #444444;
+            border: 1px solid #eeeeee;
+            border-radius: 8px;
+            padding: 16px 0;
+            font-size: 1.1rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        button:hover {
+            background-color: #f2f2f2;
+            border-color: #dddddd;
+        }
+
+        button:active {
+            background-color: #e8e8e8;
+        }
+
+        button.operator {
+            color: #666666;
+        }
+
+        button.equals {
+            background-color: #e0e0e0;
+            color: #333333;
+            border-color: #d0d0d0;
+        }
+
+        button.equals:hover {
+            background-color: #d5d5d5;
+        }
+
+        button.clear {
+            color: #a35c5c;
+        }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="title">⚡ WHAT BEATS CALCULATOR ⚡</div>
-        
+        <div class="header">
+            <div class="title">whatbeatsrock - calc edition</div>
+        </div>
+
         <div class="top-bar">
             <div>Score: <span id="score">0</span></div>
             <div>High: <span id="highScore">0</span></div>
@@ -49,7 +209,7 @@
             <button id="btnHard" onclick="setMode('hard')">Hard Mode</button>
         </div>
 
-        <div class="turn-indicator" id="turnIndicator">Player 1's turn</div>
+        <div class="turn-indicator hidden" id="turnIndicator">Player 1's turn</div>
 
         <div class="calculator">
             <div class="screen">
@@ -90,10 +250,10 @@
         let score = 0;
         let highScore = parseInt(localStorage.getItem('whatBeatsHighScore')) || 0;
         let gameOver = false;
-        let mode = 'solo'; // 'solo', 'multi', 'hard'
-        let currentPlayer = 1; // 1 or 2
-        let currentRule = null; // The current rule object
-        let ruleCount = 0; // How many turns before rule changes
+        let mode = 'solo';
+        let currentPlayer = 1;
+        let currentRule = null;
+        let ruleCount = 0;
 
         const display = document.getElementById('display');
         const message = document.getElementById('message');
@@ -102,8 +262,6 @@
         const turnIndicator = document.getElementById('turnIndicator');
 
         // --- RULE DEFINITIONS ---
-        // Each rule has: name, weight (chance of appearing), test function, and success/fail messages.
-        // Weighting: Higher weight = more common. + and - are common, / and * less, % and ^ rare.
         const rules = [
             {
                 id: 'beats',
@@ -111,8 +269,8 @@
                 weight: 30,
                 desc: 'What BEATS',
                 check: (guess, prev) => guess > prev,
-                successMsg: (guess, prev) => `✅ ${guess} beats ${prev}!`,
-                failMsg: (guess, prev) => `💀 ${guess} does NOT beat ${prev}!`
+                successMsg: (guess, prev) => `${guess} beats ${prev}.`,
+                failMsg: (guess, prev) => `${guess} does NOT beat ${prev}.`
             },
             {
                 id: 'doesntBeat',
@@ -120,8 +278,8 @@
                 weight: 25,
                 desc: 'What DOESNT BEAT',
                 check: (guess, prev) => guess < prev,
-                successMsg: (guess, prev) => `✅ ${guess} doesn't beat ${prev}!`,
-                failMsg: (guess, prev) => `💀 ${guess} DOES beat ${prev}!`
+                successMsg: (guess, prev) => `${guess} doesn't beat ${prev}.`,
+                failMsg: (guess, prev) => `${guess} DOES beat ${prev}.`
             },
             {
                 id: 'divides',
@@ -129,8 +287,8 @@
                 weight: 15,
                 desc: 'What DIVIDES',
                 check: (guess, prev) => prev !== 0 && guess !== 0 && prev % guess === 0,
-                successMsg: (guess, prev) => `✅ ${guess} divides ${prev}!`,
-                failMsg: (guess, prev) => `💀 ${guess} does NOT divide ${prev}!`
+                successMsg: (guess, prev) => `${guess} divides ${prev}.`,
+                failMsg: (guess, prev) => `${guess} does NOT divide ${prev}.`
             },
             {
                 id: 'factorOf',
@@ -138,8 +296,8 @@
                 weight: 15,
                 desc: 'What IS A FACTOR OF',
                 check: (guess, prev) => guess !== 0 && prev % guess === 0,
-                successMsg: (guess, prev) => `✅ ${guess} is a factor of ${prev}!`,
-                failMsg: (guess, prev) => `💀 ${guess} is NOT a factor of ${prev}!`
+                successMsg: (guess, prev) => `${guess} is a factor of ${prev}.`,
+                failMsg: (guess, prev) => `${guess} is NOT a factor of ${prev}.`
             },
             {
                 id: 'multipliesInto',
@@ -147,8 +305,8 @@
                 weight: 8,
                 desc: 'What MULTIPLIED BY SOMETHING GIVES',
                 check: (guess, prev) => guess !== 0 && prev % guess === 0,
-                successMsg: (guess, prev) => `✅ ${guess} × ${prev/guess} = ${prev}!`,
-                failMsg: (guess, prev) => `💀 ${guess} doesn't multiply into ${prev}!`
+                successMsg: (guess, prev) => `${guess} x ${prev/guess} = ${prev}.`,
+                failMsg: (guess, prev) => `${guess} doesn't multiply into ${prev}.`
             },
             {
                 id: 'modulo',
@@ -156,8 +314,8 @@
                 weight: 5,
                 desc: 'What MODULO',
                 check: (guess, prev) => guess !== 0 && (prev % guess) === 0,
-                successMsg: (guess, prev) => `✅ ${prev} mod ${guess} = 0!`,
-                failMsg: (guess, prev) => `💀 ${prev} mod ${guess} ≠ 0!`
+                successMsg: (guess, prev) => `${prev} mod ${guess} = 0.`,
+                failMsg: (guess, prev) => `${prev} mod ${guess} does not equal 0.`
             },
             {
                 id: 'power',
@@ -165,12 +323,11 @@
                 weight: 3,
                 desc: 'What is a POWER OF',
                 check: (guess, prev) => guess > 1 && prev > 1 && Number.isInteger(Math.log(prev) / Math.log(guess)),
-                successMsg: (guess, prev) => `✅ ${guess} is a power of ${prev}!`,
-                failMsg: (guess, prev) => `💀 ${guess} is NOT a power of ${prev}!`
+                successMsg: (guess, prev) => `${guess} is a power of ${prev}.`,
+                failMsg: (guess, prev) => `${guess} is NOT a power of ${prev}.`
             }
         ];
 
-        // --- WEIGHTED RANDOM PICKER ---
         function pickWeightedRule() {
             const totalWeight = rules.reduce((sum, r) => sum + r.weight, 0);
             let random = Math.random() * totalWeight;
@@ -178,33 +335,17 @@
                 random -= rule.weight;
                 if (random <= 0) return rule;
             }
-            return rules[0]; // Fallback
+            return rules[0];
         }
 
-        // --- CORE GAME LOGIC ---
-        function getWhatBeats(number) {
-            // Simple +1 logic for the "What beats" default
-            if (number === 0) return 1;
-            if (number === 69) return 70;
-            if (number === 420) return 421;
-            if (number === 666) return 667;
-            if (number === 1000) return 1001;
-            if (number === 1337) return 1338;
-            return number + 1;
-        }
-
-        // --- MODE SWITCHING ---
         function setMode(newMode) {
             mode = newMode;
-            // Update button styles
             document.getElementById('btnSolo').classList.toggle('active', mode === 'solo');
             document.getElementById('btnMulti').classList.toggle('active', mode === 'multi');
             document.getElementById('btnHard').classList.toggle('active', mode === 'hard');
             
-            // Reset game
             clearAll();
             
-            // Show/hide turn indicator
             if (mode === 'multi') {
                 turnIndicator.classList.remove('hidden');
                 turnIndicator.textContent = "Player 1's turn";
@@ -213,7 +354,6 @@
             }
         }
 
-        // --- DISPLAY UPDATES ---
         function updateDisplay() {
             display.textContent = currentInput;
         }
@@ -226,7 +366,6 @@
             highScoreDisplay.textContent = highScore;
         }
 
-        // --- INPUT HANDLING ---
         function appendNumber(num) {
             if (gameOver) return;
             if (currentInput === "0" && num !== ".") {
@@ -275,39 +414,35 @@
             updateDisplay();
         }
 
-        // --- SUBMIT GUESS (THE MAIN GAME LOOP) ---
         function submitGuess() {
             if (gameOver) return;
 
-            // Evaluate the math expression
             let value;
             try {
                 value = Function('"use strict";return (' + currentInput + ')')();
             } catch (e) {
-                message.textContent = "❌ Invalid math bro";
+                message.textContent = "Invalid math.";
                 message.className = "message-display lose";
                 return;
             }
 
             if (isNaN(value) || !isFinite(value)) {
-                message.textContent = "❌ That's not a number";
+                message.textContent = "That's not a number.";
                 message.className = "message-display lose";
                 return;
             }
             value = Math.round(value * 100) / 100;
 
-            // --- FIRST MOVE ---
+            // FIRST MOVE
             if (previousNumber === null) {
                 previousNumber = value;
-                // In Hard Mode, pick a random rule for the next turn
                 if (mode === 'hard') {
                     currentRule = pickWeightedRule();
                     ruleCount = 1;
-                    message.textContent = `✅ ${value}. Now: ${currentRule.desc} ${value}?`;
+                    message.textContent = `${value}. Now: ${currentRule.desc} ${value}?`;
                 } else {
-                    // In Solo/Multi, just use "What beats"
-                    currentRule = rules[0]; // 'beats'
-                    message.textContent = `✅ ${value}. What beats ${value}?`;
+                    currentRule = rules[0];
+                    message.textContent = `${value}. What beats ${value}?`;
                 }
                 message.className = "message-display win";
                 score++;
@@ -316,7 +451,6 @@
                 currentInput = "0";
                 updateDisplay();
                 
-                // Switch player in multiplayer
                 if (mode === 'multi') {
                     currentPlayer = currentPlayer === 1 ? 2 : 1;
                     turnIndicator.textContent = `Player ${currentPlayer}'s turn`;
@@ -324,15 +458,13 @@
                 return;
             }
 
-            // --- SUBSEQUENT MOVES ---
-            // In hard mode, if we've done 2 turns with the same rule, roll a new one.
+            // SUBSEQUENT MOVES
             if (mode === 'hard') {
                 ruleCount++;
-                if (ruleCount > 2) { // Change rule every 2-3 turns
+                if (ruleCount > 2) {
                     currentRule = pickWeightedRule();
                     ruleCount = 1;
-                    // Update the message to show the new rule
-                    message.textContent = `⚠️ NEW RULE: ${currentRule.desc} ${previousNumber}?`;
+                    message.textContent = `New rule: ${currentRule.desc} ${previousNumber}?`;
                     message.className = "message-display win";
                     currentInput = "0";
                     updateDisplay();
@@ -340,40 +472,32 @@
                 }
             }
 
-            // Check if the guess passes the current rule
             const passed = currentRule.check(value, previousNumber);
 
             if (passed) {
-                // Correct!
+                const oldValue = previousNumber; // Store the old number for the message
                 previousNumber = value;
                 score++;
                 updateHighScore();
                 scoreDisplay.textContent = score;
                 
-                // Success message based on rule
-                message.textContent = currentRule.successMsg(value, previousNumber);
+                message.textContent = currentRule.successMsg(value, oldValue); // Pass old value to message
                 message.className = "message-display win";
                 
-                // Prepare next turn
                 currentInput = "0";
                 updateDisplay();
 
-                // In hard mode, show the next rule
                 if (mode === 'hard') {
-                    // Rule might change next turn, but we show the current one for now
-                    // Actually, let's just show the current rule's target for the next turn
                     message.textContent += ` Now: ${currentRule.desc} ${previousNumber}?`;
                 } else {
                     message.textContent += ` What beats ${previousNumber}?`;
                 }
 
-                // Switch player in multiplayer
                 if (mode === 'multi') {
                     currentPlayer = currentPlayer === 1 ? 2 : 1;
                     turnIndicator.textContent = `Player ${currentPlayer}'s turn`;
                 }
             } else {
-                // WRONG!
                 message.textContent = currentRule.failMsg(value, previousNumber);
                 message.className = "message-display lose";
                 gameOver = true;
@@ -382,7 +506,6 @@
             }
         }
 
-        // --- INITIALIZE ---
         highScoreDisplay.textContent = highScore;
         updateDisplay();
     </script>
