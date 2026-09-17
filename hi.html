@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Beats Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body {
+            background: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .title {
+            font-size: 1.5rem;
+            color: #36bcf7;
+            text-shadow: 0 0 10px #36bcf7;
+            text-align: center;
+        }
+        .calculator {
+            background: #161b22;
+            border: 2px solid #30363d;
+            border-radius: 20px;
+            padding: 20px;
+            width: 340px;
+            box-shadow: 0 0 30px rgba(54, 188, 247, 0.2);
+        }
+        .screen {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: right;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .input-display {
+            font-size: 2rem;
+            color: #36bcf7;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        .message-display {
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-top: 5px;
+            min-height: 1.2em;
+        }
+        .message-display.win {
+            color: #3fb950;
+        }
+        .message-display.lose {
+            color: #f85149;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 18px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        button:hover {
+            background: #30363d;
+            border-color: #36bcf7;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        button.operator {
+            color: #36bcf7;
+        }
+        button.equals {
+            background: #36bcf7;
+            color: #0d1117;
+        }
+        button.equals:hover {
+            background: #58c7f9;
+        }
+        button.clear {
+            color: #f85149;
+        }
+        .score {
+            font-size: 1.1rem;
+            color: #8b949e;
+        }
+        .score span {
+            color: #3fb950;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">⚡ WHAT BEATS CALCULATOR ⚡</div>
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="calculator">
+            <div class="screen">
+                <div class="input-display" id="display">0</div>
+                <div class="message-display" id="message">Type a number and hit =</div>
+            </div>
+            <div class="buttons">
+                <button class="clear" onclick="clearAll()">C</button>
+                <button class="operator" onclick="appendOperator('/')">/</button>
+                <button class="operator" onclick="appendOperator('*')">×</button>
+                <button class="operator" onclick="deleteLast()">⌫</button>
+
+                <button onclick="appendNumber('7')">7</button>
+                <button onclick="appendNumber('8')">8</button>
+                <button onclick="appendNumber('9')">9</button>
+                <button class="operator" onclick="appendOperator('-')">-</button>
+
+                <button onclick="appendNumber('4')">4</button>
+                <button onclick="appendNumber('5')">5</button>
+                <button onclick="appendNumber('6')">6</button>
+                <button class="operator" onclick="appendOperator('+')">+</button>
+
+                <button onclick="appendNumber('1')">1</button>
+                <button onclick="appendNumber('2')">2</button>
+                <button onclick="appendNumber('3')">3</button>
+                <button class="equals" onclick="submitGuess()" style="grid-row: span 2;">=</button>
+
+                <button onclick="appendNumber('0')" style="grid-column: span 2;">0</button>
+                <button onclick="appendNumber('.')">.</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = "0";
+        let previousNumber = null;
+        let score = 0;
+        let gameOver = false;
+        const display = document.getElementById('display');
+        const message = document.getElementById('message');
+        const scoreDisplay = document.getElementById('score');
+
+        // This is the core game logic.
+        // "What beats X?" -> X + 1, unless X is a special number.
+        function getWhatBeats(number) {
+            if (number === 0) return 1;
+            if (number === 1) return 2;
+            if (number === 2) return 3;
+            if (number === 3) return 4;
+            if (number === 4) return 5;
+            if (number === 5) return 6;
+            if (number === 6) return 7;
+            if (number === 7) return 8;
+            if (number === 8) return 9;
+            if (number === 9) return 10;
+            if (number === 10) return 11;
+            if (number === 11) return 12;
+            if (number === 12) return 13;
+            if (number === 13) return 14;
+            if (number === 14) return 15;
+            if (number === 15) return 16;
+            if (number === 16) return 17;
+            if (number === 17) return 18;
+            if (number === 18) return 19;
+            if (number === 19) return 20;
+            if (number === 20) return 21;
+            if (number === 21) return 22;
+            if (number === 22) return 23;
+            if (number === 23) return 24;
+            if (number === 24) return 25;
+            if (number === 25) return 26;
+            if (number === 26) return 27;
+            if (number === 27) return 28;
+            if (number === 28) return 29;
+            if (number === 29) return 30;
+            if (number === 30) return 31;
+            if (number === 31) return 32;
+            if (number === 32) return 33;
+            if (number === 33) return 34;
+            if (number === 34) return 35;
+            if (number === 35) return 36;
+            if (number === 36) return 37;
+            if (number === 37) return 38;
+            if (number === 38) return 39;
+            if (number === 39) return 40;
+            if (number === 40) return 41;
+            if (number === 41) return 42;
+            if (number === 42) return 43;
+            if (number === 43) return 44;
+            if (number === 44) return 45;
+            if (number === 45) return 46;
+            if (number === 46) return 47;
+            if (number === 47) return 48;
+            if (number === 48) return 49;
+            if (number === 49) return 50;
+            if (number === 50) return 51;
+            // Easter eggs
+            if (number === 69) return 70;
+            if (number === 100) return 101;
+            if (number === 420) return 421;
+            if (number === 666) return 667;
+            if (number === 1000) return 1001;
+            if (number === 1337) return 1338;
+            // Default rule: just add 1
+            return number + 1;
+        }
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+        }
+
+        function appendNumber(num) {
+            if (gameOver) return;
+            if (currentInput === "0" && num !== ".") {
+                currentInput = num;
+            } else {
+                // Prevent multiple decimal points
+                if (num === "." && currentInput.includes(".")) return;
+                currentInput += num;
+            }
+            updateDisplay();
+            message.textContent = "";
+            message.className = "message-display";
+        }
+
+        function appendOperator(op) {
+            if (gameOver) return;
+            // Simple operator logic - allows basic calculator math
+            if (currentInput === "0" && (op === '*' || op === '/')) return;
+            if (currentInput.endsWith('+') || currentInput.endsWith('-') || currentInput.endsWith('*') || currentInput.endsWith('/')) {
+                currentInput = currentInput.slice(0, -1);
+            }
+            currentInput += op;
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            if (gameOver) return;
+            if (currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else {
+                currentInput = "0";
+            }
+            updateDisplay();
+        }
+
+        function clearAll() {
+            currentInput = "0";
+            previousNumber = null;
+            score = 0;
+            gameOver = false;
+            scoreDisplay.textContent = "0";
+            message.textContent = "Type a number and hit =";
+            message.className = "message-display";
+            updateDisplay();
+        }
+
+        function submitGuess() {
+            if (gameOver) return;
+
+            // Evaluate the math expression if there are operators
+            let value;
+            try {
+                // We use a safe eval by only allowing numbers and operators
+                // But for simplicity, we'll use Function constructor
+                value = Function('"use strict";return (' + currentInput + ')')();
+            } catch (e) {
+                message.textContent = "❌ Invalid math bro";
+                message.className = "message-display lose";
+                return;
+            }
+
+            if (isNaN(value) || !isFinite(value)) {
+                message.textContent = "❌ That's not a number";
+                message.className = "message-display lose";
+                return;
+            }
+
+            // Round to 2 decimal places to avoid floating point weirdness
+            value = Math.round(value * 100) / 100;
+
+            // FIRST MOVE: Just pick a number
+            if (previousNumber === null) {
+                previousNumber = value;
+                const next = getWhatBeats(value);
+                message.textContent = `✅ ${value} beats nothing yet. What beats ${value}?`;
+                message.className = "message-display win";
+                currentInput = "0";
+                updateDisplay();
+                score++;
+                scoreDisplay.textContent = score;
+                return;
+            }
+
+            // SUBSEQUENT MOVES: Must beat the previous number
+            const required = getWhatBeats(previousNumber);
+            
+            if (value > previousNumber) {
+                // Correct! They beat the previous number
+                previousNumber = value;
+                const next = getWhatBeats(value);
+                message.textContent = `✅ ${value} beats ${value-1}! What beats ${value}?`;
+                message.className = "message-display win";
+                score++;
+                scoreDisplay.textContent = score;
+                currentInput = "0";
+                updateDisplay();
+            } else {
+                // WRONG! They didn't beat the previous number
+                message.textContent = `💀 ${value} does NOT beat ${previousNumber}! Game Over.`;
+                message.className = "message-display lose";
+                gameOver = true;
+                currentInput = "0";
+                updateDisplay();
+            }
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>
